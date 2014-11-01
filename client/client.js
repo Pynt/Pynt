@@ -1,6 +1,6 @@
 dataStream = new Meteor.Stream('data');
 
-sendData = function(data) {
+sendData = function(data) {//to be called when we want to send data
     dataStream.emit('message', data);
     alert("SENT DATA TO COMPUTARO")
 };
@@ -10,11 +10,11 @@ dataStream.on('message', function(data) {
     if(typeof data == "object"){//we got a json
         alert("GOT DATA FROM PHONE");
         console.log(data);
-        dataStream('message',"OK")
+        dataStream('message',"OK");//send a message to the phone telling it the computer got the data correctly
     }
     else{//confirmation - received on mobile end
-        if(data == "OK")
-            alert("COMPUTARO RECEIVED DATA")
+        if(data == "OK")//shit didn't go down
+            alert("COMPUTARO RECEIVED DATA");
     }
     
 });

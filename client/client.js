@@ -174,8 +174,8 @@ $.fn.write = function(apiKey, url) {
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "white";
+    ctx.fillStyle = "#ecf0f1";
+    ctx.strokeStyle = "#ecf0f1";
 
     var drawing = false;
     var lastX, lastY;

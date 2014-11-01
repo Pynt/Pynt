@@ -23,5 +23,16 @@
         $("#canvas").write(apiKey);
       });
     </script>
+    {{> pythonInterpret}}
   </div>
+</template>
+
+<template name="pythonInterpret">    <!--We should make it so this only is mobile--> 
+    <textarea id="yourcode" cols="40" rows="10">
+    print "Hello World" 
+    </textarea>
+    <br /> 
+    <button type="button" id="runPython">Run</button> 
+    <pre id="output" ></pre> 
+
 </template>

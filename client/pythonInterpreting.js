@@ -25,7 +25,7 @@ function runit() {
       eval(Sk.importMainWithBody("<stdin>",false,prog)); 
    }
    catch(e) {
-       alert(e.toString())
+       mypre.textContent = e.toString();
    }
 } 
 

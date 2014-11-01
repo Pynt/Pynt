@@ -217,20 +217,6 @@ $.fn.write = function(apiKey, url) {
         }
     };
 
-   //  $("#analyzeButton").click(
-   //        function(event){
-   //               event.preventDefault();
-   //               methods.analyze();
-   //        }
-   // );
-    // Template.pyDraw.events({
-    //     'click #analyzeButton' : function(event){
-    //         event.preventDefault();
-    //         console.log("It was clicked")
-    //         methods.analyze();
-    //     }
-    // });
-
    $(canvas).on("touchstart", function(event) {
       event.preventDefault();
       var offset = $(this).first().offset();

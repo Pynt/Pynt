@@ -29,7 +29,7 @@ function runit() {
    }
 } 
 
-Template.pyDraw.events({
+Template.pythonInterpret.events({
     'click #runPython' : function(){
       runit();
     },

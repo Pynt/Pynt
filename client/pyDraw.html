@@ -47,9 +47,12 @@
     {{> pythonInterpret}}
 </template>
 
-<template name="pythonInterpret">    <!--We should make it so this only is mobile--> 
+<template name="pythonInterpret">    <!--We should make it so this only is desktop only--> 
+    <!--No spacing/tabbing to ensure python tabs line up-->
     <textarea id="yourcode" cols="40" rows="10">
-    print "Hello World" 
+print("Hello world");
+for i in [1,2,"buckle my shoe"]:
+    print(i);
     </textarea>
     <br /> 
     <button type="button" id="runPython">Run</button> 

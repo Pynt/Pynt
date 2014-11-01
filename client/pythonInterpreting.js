@@ -1,3 +1,5 @@
+//the console will log that Sk is not foudn, which is not a problem as the code still runs
+
 function outf(text) { 
     var mypre = document.getElementById("output"); 
     mypre.innerHTML = mypre.innerHTML + text; 

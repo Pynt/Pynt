@@ -9,6 +9,7 @@ dataStream.on('message', function(data) {
     console.log(data);
     if(typeof data == "object"){//we got a json
         console.log(data);
+        receiveData(data);
         sendData("OK");//send a message to the phone telling it the computer got the data correctly
     }
     else{//confirmation - received on mobile end
@@ -100,6 +101,7 @@ recognize = function(strokes, apiKey, url) {
                             value: text[i].result.textSegmentResult.candidates[0].label, 
                             x: text[i].data.topLeftPoint.x + text[i].data.width/2.0, 
                             y: text[i].data.topLeftPoint.y + text[i].data.height/2.0
+                            type: 'text'
                         }
                 }
             }
@@ -111,6 +113,7 @@ recognize = function(strokes, apiKey, url) {
                         value: shapes[i].candidates[0].label,
                         x: ave(shapes[i].candidates[0].primitives, 'x'),
                         y: ave(shapes[i].candidates[0].primitives, 'y')
+                        type: 'shape'
                     };
                 }
             }
@@ -122,6 +125,7 @@ recognize = function(strokes, apiKey, url) {
                         var elements = groups[i].elementReferences
                         var son = {
                             list: []
+                            type: 'list'
                         };
                         for(var j=0; j< elements.length; j++)
                         {

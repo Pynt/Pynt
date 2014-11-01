@@ -1,3 +1,25 @@
+dataStream = new Meteor.Stream('data');
+
+sendData = function(data) {
+    dataStream.emit('message', data);
+    alert("SENT DATA TO COMPUTARO")
+};
+
+dataStream.on('message', function(data) {
+    console.log(data);
+    if(typeof data == "object"){//we got a json
+        alert("GOT DATA FROM PHONE");
+        console.log(data);
+        dataStream('message',"OK")
+    }
+    else{//confirmation - received on mobile end
+        if(data == "OK")
+            alert("COMPUTARO RECEIVED DATA")
+    }
+    
+});
+
+
 if (Meteor.isClient) {
     // counter starts at 0
     Session.setDefault("counter", 0);

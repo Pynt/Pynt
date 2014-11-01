@@ -100,8 +100,8 @@ recognize = function(strokes, apiKey, url) {
                             value: text[i].result.textSegmentResult.candidates[0].label, 
                             x: text[i].data.topLeftPoint.x + text[i].data.width/2.0, 
                             y: text[i].data.topLeftPoint.y + text[i].data.height/2.0
-                        };
-                };
+                        }
+                }
             }
 
             if(shapes.length>0){
@@ -112,21 +112,8 @@ recognize = function(strokes, apiKey, url) {
                         x: ave(shapes[i].candidates[0].primitives, 'x'),
                         y: ave(shapes[i].candidates[0].primitives, 'y')
                     };
-                
-            for (var i = 0; i < text.length; i++) {
-                candidates = text[i].result.textSegmentResult.candidates
-                for (var i = 0; i < candidates.length; i++) {
-                    console.log(candidates[i].label)
-                };
-            };
-            for (var i = 0; i < shapes.length; i++) {
-                candidates = shapes[i].candidates
-                for (var i = 0; i < candidates.length; i++) {
-                    console.log(candidates[i].label);
-
-                    //normalized resemblence score?
-                };
-            };
+                }
+            }
 
             if(groups.length>0){
                 for (var i = 0; i< groups.length; i++)
@@ -149,6 +136,9 @@ recognize = function(strokes, apiKey, url) {
                     }
                 }
             }
+            obj = obj.filter(function(e){
+                return e!=null;//removes null values
+            })
             console.log(obj);
 
             var str = JSON.stringify(jsonResult, undefined, 4);

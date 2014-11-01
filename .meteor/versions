@@ -13,6 +13,7 @@ ctl@1.0.2
 ddp@1.0.11
 deps@1.0.5
 ejson@1.0.4
+ewall:foundation@5.4.6
 fastclick@1.0.1
 follower-livedata@1.0.2
 geojson-utils@1.0.1
@@ -24,6 +25,7 @@ insecure@1.0.1
 jquery@1.0.1
 json@1.0.1
 launch-screen@1.0.0
+lepozepo:streams@0.2.0
 livedata@1.0.11
 logging@1.0.5
 meteor-platform@1.2.0

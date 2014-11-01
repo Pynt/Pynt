@@ -4,29 +4,35 @@
 
 <body>
   <h1>Welcome to Meteor!</h1>
-
   {{> pyDraw}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name = "pyDraw">
+  <div style = "width:100%; height:100vh;">
+    <canvas id="canvas" style="width:75vw; height: 75vh; border: 1px solid black; background-color: #292929;"> </canvas>
+    <br>
+    <button id="analyzeButton">Analyze</button>
+
+    <br/>
+    <pre id="result"></pre>
+    <script type="application/javascript" src="myScriptMethods.js"></script>
+    <script type="application/javascript">
+      $(function() {
+        var apiKey = "3d30650c-d906-4dc0-b37b-e0bc9ddd2a9a";
+        
+        $("#canvas").write(apiKey);
+      });
+    </script>
+    {{> pythonInterpret}}
+  </div>
 </template>
 
-<template name = "pyDraw">
-  
-  <canvas id="canvas" style="width:700px; height: 300px; border: 1px solid black; background-color: #FFFFBF;"> </canvas>
-  
-  <button id="analyzeButton">Analyze</button>
+<template name="pythonInterpret">    <!--We should make it so this only is mobile--> 
+    <textarea id="yourcode" cols="40" rows="10">
+    print "Hello World" 
+    </textarea>
+    <br /> 
+    <button type="button" id="runPython">Run</button> 
+    <pre id="output" ></pre> 
 
-  <br/>
-  <pre id="result"></pre>
-  <script type="application/javascript" src="myScriptMethods.js"></script>
-  <script type="application/javascript">
-    $(function() {
-      var apiKey = "3d30650c-d906-4dc0-b37b-e0bc9ddd2a9a";
-      
-      $("#canvas").write(apiKey);
-    });
-  </script>
 </template>

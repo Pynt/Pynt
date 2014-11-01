@@ -1,19 +1,25 @@
+dataStream = new Meteor.Stream('data');
+
+sendData = function(data) {//to be called when we want to send data
+    dataStream.emit('message', data);
+    console.log("Sent data to computer");
+};
+
+dataStream.on('message', function(data) {
+    console.log(data);
+    if(typeof data == "object"){//we got a json
+        console.log(data);
+        sendData("OK");//send a message to the phone telling it the computer got the data correctly
+    }
+    else{//confirmation - received on mobile end
+        if(data == "OK")//shit didn't go down
+            console.log("Computer successfully received",data);
+    }
+    
+});
+
+
 if (Meteor.isClient) {
-    // counter starts at 0
-    Session.setDefault("counter", 0);
-
-    Template.hello.helpers({
-        counter: function() {
-            return Session.get("counter");
-        }
-    });
-
-    Template.hello.events({
-        'click button': function() {
-            // increment the counter when button is clicked
-            Session.set("counter", Session.get("counter") + 1);
-        }
-    });
 
     var ave = function(list, b) {
         var min = 10000;
@@ -89,6 +95,7 @@ if (Meteor.isClient) {
                 groups = jsonResult.result.groups;
                 var obj = [];
                 //analyze results here
+<<<<<<< HEAD
                 if(text.length>0){
                     for (var i = 0; i < text.length; i++) {
                         obj[text[i].uniqueID] = 
@@ -109,8 +116,22 @@ if (Meteor.isClient) {
                             y: ave(shapes[i].candidates[0].primitives, 'y')
                         };
                         
+=======
+                for (var i = 0; i < text.length; i++) {
+                    candidates = text[i].result.textSegmentResult.candidates
+                    for (var i = 0; i < candidates.length; i++) {
+                        console.log(candidates[i].label)
                     };
-                }
+                };
+                for (var i = 0; i < shapes.length; i++) {
+                    candidates = shapes[i].candidates
+                    for (var i = 0; i < candidates.length; i++) {
+                        console.log(candidates[i].label);
+
+                        //normalized resemblence score?
+>>>>>>> origin
+                    };
+                };
 
                 if(groups.length>0){
                     for (var i = 0; i< groups.length; i++)
@@ -136,6 +157,9 @@ if (Meteor.isClient) {
                 console.log(obj);
 
                 var str = JSON.stringify(jsonResult, undefined, 4);
+                //assuming fjson is the cleaned up str...
+                fjson = str;//this'll be different later, naturally
+                sendData(fjson);
                 $("#result").html(syntaxHighlight(str));
             },
             "json"
@@ -144,7 +168,17 @@ if (Meteor.isClient) {
             $("#result").text(textStatus + " : " + XMLHttpRequest.responseText);
         });
     };
-
+    function button(){
+        methods.analyze();
+    }
+    Template.pyDraw.events({
+        'click #analyzeButton' : function(){
+            button();
+        },
+        'touchend #analyzeButton' : function(){
+            button();
+        }
+    });
     /** Draw strokes in the canvas, as specified in the accompanying HTML file. */
     $.fn.write = function(apiKey, url) {
         var stroke;
@@ -158,13 +192,13 @@ if (Meteor.isClient) {
         ctx.lineWidth = 2;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "blue";
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "white";
 
         var drawing = false;
         var lastX, lastY;
 
-        var methods = {
+        methods = {
             start: function(x, y) {
                 stroke = {
                     "type": "stroke",
@@ -201,60 +235,63 @@ if (Meteor.isClient) {
             }
         };
 
-        /** Describes the writing events on the canvas, for mouse and touchscreen.   */
+       //  $("#analyzeButton").click(
+       //        function(event){
+       //               event.preventDefault();
+       //               methods.analyze();
+       //        }
+       // );
+        // Template.pyDraw.events({
+        //     'click #analyzeButton' : function(event){
+        //         event.preventDefault();
+        //         console.log("It was clicked")
+        //         methods.analyze();
+        //     }
+        // });
 
+       $(canvas).on("touchstart", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var touch = event.originalEvent.touches[0];
+          var x = touch.pageX - offset.left;
+          var y = touch.pageY - offset.top;
+          methods.start(x, y);
+       });
 
-        $("#analyzeButton").click(
-            function(event) {
-                event.preventDefault();
-                methods.analyze();
-            }
-        );
+       $(canvas).on("touchmove", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var touch = event.originalEvent.touches[0];
+          var x = touch.pageX - offset.left;
+          var y = touch.pageY - offset.top;
+          methods.move(x, y);
+       });
 
+       $("*").on("touchend", function(event) {
+          event.preventDefault();
+          methods.end();
+       });
 
-        $(canvas).on("touchstart", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var touch = event.originalEvent.touches[0];
-            var x = touch.pageX - offset.left;
-            var y = touch.pageY - offset.top;
-            methods.start(x, y);
-        });
+       $(canvas).on("mousedown", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var x = event.pageX - offset.left;
+          var y = event.pageY - offset.top;
+          methods.start(x, y);
+       });
 
-        $(canvas).on("touchmove", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var touch = event.originalEvent.touches[0];
-            var x = touch.pageX - offset.left;
-            var y = touch.pageY - offset.top;
-            methods.move(x, y);
-        });
+       $(canvas).on("mousemove", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var x = event.pageX - offset.left;
+          var y = event.pageY - offset.top;
+          methods.move(x, y);
+       });
 
-        $("*").on("touchend", function(event) {
-            event.preventDefault();
-            methods.end();
-        });
-
-        $(canvas).on("mousedown", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var x = event.pageX - offset.left;
-            var y = event.pageY - offset.top;
-            methods.start(x, y);
-        });
-
-        $(canvas).on("mousemove", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var x = event.pageX - offset.left;
-            var y = event.pageY - offset.top;
-            methods.move(x, y);
-        });
-
-        $("*").on("mouseup", function(event) {
-            event.preventDefault();
-            methods.end();
-        });
+       $("*").on("mouseup", function(event) {
+          event.preventDefault();
+          methods.end();
+       });
     };
 
     function syntaxHighlight(json) {
@@ -275,6 +312,4 @@ if (Meteor.isClient) {
             return '<span class="' + cls + '">' + match + '</span>';
         });
     };
-
-
 }

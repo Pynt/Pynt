@@ -74,6 +74,9 @@ if (Meteor.isClient) {
 
 
                 var str = JSON.stringify(jsonResult, undefined, 4);
+                //assuming fjson is the cleaned up str...
+                fjson = str;//this'll be different later, naturally
+                sendData(fjson);
                 $("#result").html(syntaxHighlight(str));
             },
             "json"

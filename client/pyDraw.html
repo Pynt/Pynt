@@ -3,7 +3,12 @@
 </head>
 
 <body>
-    <h1>Welcome to Meteor!</h1> {{> pyDraw}}
+    <div class = "row">
+        <div class = "columns small-centered small-12">
+            <h1>Welcome to pyDraw</h1> 
+        </div>
+    </div>
+    {{> pyDraw}}
 </body>
 
 <template name="pyDraw">
@@ -49,14 +54,25 @@
 
 <template name="pythonInterpret">    <!--We should make it so this only is desktop only--> 
     <!--No spacing/tabbing to ensure python tabs line up-->
+    <div class = "row">
     <textarea id="yourcode" cols="40" rows="10">
 print("Hello world");
 for i in [1,2,"buckle my shoe"]:
     print(i);
 
     </textarea>
-    <br /> 
-    <button type="button" id="runPython">Run</button> 
-    <pre id="output" ></pre> 
+    </div>
+    <br />
+    <div class = "row">
+        <div class = "columns small-centered small-2">
+            <button type="button" id="runPython">Run</button>  
+        </div>
+    </div>
+    <div class = "row">
+        <div class = "columns small-centered small-12 codeOutput">
+            <pre id="output" ></pre>
+        </div>
+    </div>
+    <br>
 
 </template>

@@ -100,7 +100,7 @@ recognize = function(strokes, apiKey, url) {
                         {
                             value: text[i].result.textSegmentResult.candidates[0].label, 
                             x: text[i].data.topLeftPoint.x + text[i].data.width/2.0, 
-                            y: text[i].data.topLeftPoint.y + text[i].data.height/2.0
+                            y: text[i].data.topLeftPoint.y + text[i].data.height/2.0,
                             type: 'text'
                         }
                 }
@@ -112,7 +112,7 @@ recognize = function(strokes, apiKey, url) {
                     {
                         value: shapes[i].candidates[0].label,
                         x: ave(shapes[i].candidates[0].primitives, 'x'),
-                        y: ave(shapes[i].candidates[0].primitives, 'y')
+                        y: ave(shapes[i].candidates[0].primitives, 'y'),
                         type: 'shape'
                     };
                 }
@@ -124,7 +124,7 @@ recognize = function(strokes, apiKey, url) {
                     if(groups[i].type == 'LIST'){
                         var elements = groups[i].elementReferences
                         var son = {
-                            list: []
+                            list: [],
                             type: 'list'
                         };
                         for(var j=0; j< elements.length; j++)

@@ -8,7 +8,11 @@
             <h1>Welcome to pyDraw</h1> 
         </div>
     </div>
-    {{> pyDraw}}
+    {{#if isMobile}}
+        {{> pyDraw}}
+    {{else}}
+        {{> pythonInterpret}}
+    {{/if}}
 </body>
 
 <template name="pyDraw">
@@ -49,7 +53,6 @@
         $("#canvas").write(apiKey);
       });
     </script>
-    {{> pythonInterpret}}
 </template>
 
 <template name="pythonInterpret">    <!--We should make it so this only is desktop only--> 

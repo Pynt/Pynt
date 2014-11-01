@@ -141,10 +141,7 @@ recognize = function(strokes, apiKey, url) {
             })
             console.log(obj);
 
-            var str = JSON.stringify(jsonResult, undefined, 4);
-            //assuming fjson is the cleaned up str...
-            fjson = str;//this'll be different later, naturally
-            sendData(fjson);
+            sendData(obj);
             $("#result").html(syntaxHighlight(str));
         },
         "json"

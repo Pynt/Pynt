@@ -1,3 +1,24 @@
+dataStream = new Meteor.Stream('data');
+
+sendData = function(data) {//to be called when we want to send data
+    dataStream.emit('message', data);
+    console.log("Sent data to computer");
+};
+
+dataStream.on('message', function(data) {
+    console.log(data);
+    if(typeof data == "object"){//we got a json
+        console.log(data);
+        sendData("OK");//send a message to the phone telling it the computer got the data correctly
+    }
+    else{//confirmation - received on mobile end
+        if(data == "OK")//shit didn't go down
+            console.log("Computer successfully received",data);
+    }
+    
+});
+
+
 if (Meteor.isClient) {
 
     /** This function creates the JSON object, sends it and retrieves the result. */
@@ -53,6 +74,9 @@ if (Meteor.isClient) {
 
 
                 var str = JSON.stringify(jsonResult, undefined, 4);
+                //assuming fjson is the cleaned up str...
+                fjson = str;//this'll be different later, naturally
+                sendData(fjson);
                 $("#result").html(syntaxHighlight(str));
             },
             "json"

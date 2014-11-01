@@ -12,6 +12,7 @@
         {{> pyDraw}}
     {{else}}
         {{> pythonInterpret}}
+        {{> alerts}}
     {{/if}}
 </body>
 
@@ -78,4 +79,14 @@ for i in [1,2,"buckle my shoe"]:
     </div>
     <br>
 
+</template>
+<template name = "alerts">
+    <div class = "row">
+        <div class = "columns small-centered small-10">
+            <div data-alert id = "recFail" class = "alert-box alert hidden">
+                Recognition failed, please reload the page and try again.
+                <a href="#" class="close">&times;</a>
+            </div>
+        </div>
+    </div>
 </template>

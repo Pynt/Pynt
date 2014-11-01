@@ -1,0 +1,32 @@
+<head>
+  <title>pyDraw</title>
+</head>
+
+<body>
+  <h1>Welcome to Meteor!</h1>
+
+  {{> pyDraw}}
+</body>
+
+<template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+</template>
+
+<template name = "pyDraw">
+  
+  <canvas id="canvas" style="width:700px; height: 300px; border: 1px solid black; background-color: #FFFFBF;"> </canvas>
+  
+  <button id="analyzeButton">Analyze</button>
+
+  <br/>
+  <pre id="result"></pre>
+  <script type="application/javascript" src="myScriptMethods.js"></script>
+  <script type="application/javascript">
+    $(function() {
+      var apiKey = "3d30650c-d906-4dc0-b37b-e0bc9ddd2a9a";
+      
+      $("#canvas").write(apiKey);
+    });
+  </script>
+</template>

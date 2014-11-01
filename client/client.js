@@ -5,11 +5,14 @@ sendData = function(data) {//to be called when we want to send data
     console.log("Sent data to computer");
 };
 
+
 dataStream.on('message', function(data) {
-    console.log(data);
+    //console.log(data);
     if(typeof data == "object"){//we got a json
-        console.log(data);
+        //console.log(data);
         sendData("OK");//send a message to the phone telling it the computer got the data correctly
+        receiveData(data);
+        
     }
     else{//confirmation - received on mobile end
         if(data == "OK")//shit didn't go down
@@ -96,22 +99,35 @@ recognize = function(strokes, apiKey, url) {
             //analyze results here
             if(text.length>0){
                 for (var i = 0; i < text.length; i++) {
+                    var textext = text[i].result.textSegmentResult.candidates[0].label.replace(" ","");
+                    textext = textext.replace("-","");
                     obj[text[i].uniqueID] = 
                         {
-                            value: text[i].result.textSegmentResult.candidates[0].label, 
+                            value: textext, 
                             x: text[i].data.topLeftPoint.x + text[i].data.width/2.0, 
-                            y: text[i].data.topLeftPoint.y + text[i].data.height/2.0
+                            y: text[i].data.topLeftPoint.y + text[i].data.height/2.0,
+                            type: 'text'
                         }
                 }
             }
 
             if(shapes.length>0){
                 for (var i = 0; i < shapes.length; i++) {
+                    var name = shapes[i].candidates[0].label;
+                    if(name.indexOf('triangle') != -1)
+                    {
+                        name = 'Triangle';
+                    }
+                    else if(name.indexOf('quadrilateral'))
+                    {
+                        name = 'Quad';
+                    }
                     obj[shapes[i].uniqueID] =
                     {
-                        value: shapes[i].candidates[0].label,
+                        value: name,
                         x: ave(shapes[i].candidates[0].primitives, 'x'),
-                        y: ave(shapes[i].candidates[0].primitives, 'y')
+                        y: ave(shapes[i].candidates[0].primitives, 'y'),
+                        type: 'shape'
                     };
                 }
             }
@@ -122,7 +138,8 @@ recognize = function(strokes, apiKey, url) {
                     if(groups[i].type == 'LIST'){
                         var elements = groups[i].elementReferences
                         var son = {
-                            list: []
+                            list: [],
+                            type: 'list'
                         };
                         for(var j=0; j< elements.length; j++)
                         {
@@ -285,3 +302,56 @@ UI.registerHelper("isMobile", function(){
     var index = navigator.appVersion.indexOf("Mobile");
     return (index > -1);
 })
+
+
+function receiveData(data) {
+    var stk = new Array();
+    var classes = {};
+
+    console.log("IM HERE");
+
+    for(var i=0; i<data.length; i++)
+    {
+        if(data[i].type == "shape")
+        {
+            if (data[i].child == undefined)
+            {
+                stk.push
+                (
+                    {
+                        shape: data[i].value,
+                        nu: 0
+                    }
+                )
+                console.log("um");
+            }
+            //document.getElementById("yourcode").setContent = data[i].child.value + "= "
+        }
+        else if(data[i].type == 'list')
+        {
+            var a = stk.pop()
+            var list = data[i].list
+            if(a.nu == 0)
+            {
+                var str = 'class ' + a.shape + ":\n";
+                str += '    def __init__(self'
+                for(var j=0; j<list.length; j++)
+                {
+                    str += ', '+list[j].value+j.toString();
+                }
+                str += '):\n';
+                for(var j=0; j<list.length; j++)
+                {
+                    str += '        self.'+list[j].value+" = "+list[j].value+j.toString()+"\n";
+                }
+                document.getElementById("yourcode").value = str;
+                console.log("hello");
+            }
+            else
+            {
+            
+
+            }
+        }
+    }
+}

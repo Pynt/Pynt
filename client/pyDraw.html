@@ -28,9 +28,34 @@
                 $(function() {
                     var apiKey = "3d30650c-d906-4dc0-b37b-e0bc9ddd2a9a";
 
+<<<<<<< HEAD
                     $("#canvas").write(apiKey);
                 });
             </script>
         </div>
     </div>
+=======
+    <br/>
+    <pre id="result"></pre>
+    <script type="application/javascript" src="myScriptMethods.js"></script>
+    <script type="application/javascript">
+      $(function() {
+        var apiKey = "3d30650c-d906-4dc0-b37b-e0bc9ddd2a9a";
+        
+        $("#canvas").write(apiKey);
+      });
+    </script>
+    {{> pythonInterpret}}
+  </div>
+</template>
+
+<template name="pythonInterpret">    <!--We should make it so this only is mobile--> 
+    <textarea id="yourcode" cols="40" rows="10">
+    print "Hello World" 
+    </textarea>
+    <br /> 
+    <button type="button" id="runPython">Run</button> 
+    <pre id="output" ></pre> 
+
+>>>>>>> d2b0c51db02dc9852264717981324051aa820f1d
 </template>

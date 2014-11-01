@@ -72,6 +72,7 @@ recognize = function(strokes, apiKey, url) {
 
     /** Send data to POST. Give your API key as supplied on registration, or the 
      * server will not recognize you as a valid user. */
+     console.log(apiKey);
     var data = {
         "apiKey": apiKey,
         "analyzerInput": JSON.stringify(jsonPost)
@@ -142,7 +143,6 @@ recognize = function(strokes, apiKey, url) {
             console.log(obj);
 
             sendData(obj);
-            $("#result").html(syntaxHighlight(str));
         },
         "json"
     ).error(function(XMLHttpRequest, textStatus) {

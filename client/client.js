@@ -15,6 +15,43 @@ if (Meteor.isClient) {
         }
     });
 
+    var ave = function(list, b) {
+        var min = 10000;
+        var max = 0;
+
+        for (var i=0; i<list.length; i++) {
+            
+                if (b == 'x') {
+                    if (list[i].firstPoint.x > max){
+                        max = list[i].firstPoint.x;
+                    }
+                    if (list[i].firstPoint.x < min){
+                        min = list[i].firstPoint.x;
+                    }
+                    if (list[i].lastPoint.x > max){
+                        max = list[i].lastPoint.x;
+                    }
+                    if (list[i].lastPoint.x < min){
+                        min = list[i].lastPoint.x;
+                    }
+                }
+                else{
+                    if (list[i].firstPoint.y > max){
+                        max = list[i].firstPoint.y;
+                    }
+                    if (list[i].firstPoint.y < min){
+                        min = list[i].firstPoint.y;
+                    }
+                    if (list[i].lastPoint.y > max){
+                        max = list[i].lastPoint.y;
+                    }
+                    if (list[i].lastPoint.y < min){
+                        min = list[i].lastPoint.y;
+                    }
+                }
+        }
+        return (max + min)/2;
+    };
     /** This function creates the JSON object, sends it and retrieves the result. */
     recognize = function(strokes, apiKey, url) {
         if (!url) url = "https://myscript-webservices.visionobjects.com/api/myscript/v2.0/analyzer/doSimpleRecognition.json";
@@ -49,25 +86,54 @@ if (Meteor.isClient) {
 
                 text = jsonResult.result.textLines;
                 shapes = jsonResult.result.shapes;
+                groups = jsonResult.result.groups;
+                var obj = [];
                 //analyze results here
                 if(text.length>0){
                     for (var i = 0; i < text.length; i++) {
-                        candidates = text[i].result.textSegmentResult.candidates
-                        for (var i = 0; i < candidates.length; i++) {
-                            console.log(candidates[i].label)
-                        };
+                        obj[text[i].uniqueID] = 
+                            {
+                                value: text[i].result.textSegmentResult.candidates[0].label, 
+                                x: text[i].data.topLeftPoint.x + text[i].data.width/2.0, 
+                                y: text[i].data.topLeftPoint.y + text[i].data.height/2.0
+                            };
                     };
                 }
+
                 if(shapes.length>0){
                     for (var i = 0; i < shapes.length; i++) {
-                        candidates = shapes[i].candidates
-                        for (var i = 0; i < candidates.length; i++) {
-                            console.log(candidates[i].label);
+                        obj[shapes[i].uniqueID] =
+                        {
+                            value: shapes[i].candidates[0].label,
+                            x: ave(shapes[i].candidates[0].primitives, 'x'),
+                            y: ave(shapes[i].candidates[0].primitives, 'y')
                         };
+                        
                     };
                 }
 
+                if(groups.length>0){
+                    for (var i = 0; i< groups.length; i++)
+                    {
+                        if(groups[i].type == 'LIST'){
+                            var elements = groups[i].elementReferences
+                            var son = {
+                                list: []
+                            };
+                            for(var j=0; j< elements.length; j++)
+                            {
 
+                                son.list.push(obj[groups[i].elementReferences[j].uniqueID]);
+                                obj[groups[i].elementReferences[j].uniqueID] = null;
+                            }
+                            obj.push(son)
+                        }else{
+                            obj[groups[i].elementReferences[1].uniqueID].child = obj[groups[i].elementReferences[0].uniqueID];
+                            obj[groups[i].elementReferences[0].uniqueID] = null;
+                        }
+                    }
+                }
+                console.log(obj);
 
                 var str = JSON.stringify(jsonResult, undefined, 4);
                 $("#result").html(syntaxHighlight(str));

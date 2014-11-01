@@ -324,6 +324,7 @@ function receiveData(data) {
                     }
                 )
                 console.log("um");
+                //$("#recFail").show();
             }
             //document.getElementById("yourcode").setContent = data[i].child.value + "= "
         }

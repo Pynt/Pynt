@@ -21,21 +21,6 @@ dataStream.on('message', function(data) {
 
 
 if (Meteor.isClient) {
-    // counter starts at 0
-    Session.setDefault("counter", 0);
-
-    Template.hello.helpers({
-        counter: function() {
-            return Session.get("counter");
-        }
-    });
-
-    Template.hello.events({
-        'click button': function() {
-            // increment the counter when button is clicked
-            Session.set("counter", Session.get("counter") + 1);
-        }
-    });
 
     /** This function creates the JSON object, sends it and retrieves the result. */
     recognize = function(strokes, apiKey, url) {
@@ -72,22 +57,20 @@ if (Meteor.isClient) {
                 text = jsonResult.result.textLines;
                 shapes = jsonResult.result.shapes;
                 //analyze results here
-                if(text.length>0){
-                    for (var i = 0; i < text.length; i++) {
-                        candidates = text[i].result.textSegmentResult.candidates
-                        for (var i = 0; i < candidates.length; i++) {
-                            console.log(candidates[i].label)
-                        };
+                for (var i = 0; i < text.length; i++) {
+                    candidates = text[i].result.textSegmentResult.candidates
+                    for (var i = 0; i < candidates.length; i++) {
+                        console.log(candidates[i].label)
                     };
-                }
-                if(shapes.length>0){
-                    for (var i = 0; i < shapes.length; i++) {
-                        candidates = shapes[i].candidates
-                        for (var i = 0; i < candidates.length; i++) {
-                            console.log(candidates[i].label);
-                        };
+                };
+                for (var i = 0; i < shapes.length; i++) {
+                    candidates = shapes[i].candidates
+                    for (var i = 0; i < candidates.length; i++) {
+                        console.log(candidates[i].label);
+
+                        //normalized resemblence score?
                     };
-                }
+                };
 
 
 
@@ -100,7 +83,17 @@ if (Meteor.isClient) {
             $("#result").text(textStatus + " : " + XMLHttpRequest.responseText);
         });
     };
-
+    function button(){
+        methods.analyze();
+    }
+    Template.pyDraw.events({
+        'click #analyzeButton' : function(){
+            button();
+        },
+        'touchend #analyzeButton' : function(){
+            button();
+        }
+    });
     /** Draw strokes in the canvas, as specified in the accompanying HTML file. */
     $.fn.write = function(apiKey, url) {
         var stroke;
@@ -114,13 +107,13 @@ if (Meteor.isClient) {
         ctx.lineWidth = 2;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "blue";
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "white";
 
         var drawing = false;
         var lastX, lastY;
 
-        var methods = {
+        methods = {
             start: function(x, y) {
                 stroke = {
                     "type": "stroke",
@@ -157,60 +150,63 @@ if (Meteor.isClient) {
             }
         };
 
-        /** Describes the writing events on the canvas, for mouse and touchscreen.   */
+       //  $("#analyzeButton").click(
+       //        function(event){
+       //               event.preventDefault();
+       //               methods.analyze();
+       //        }
+       // );
+        // Template.pyDraw.events({
+        //     'click #analyzeButton' : function(event){
+        //         event.preventDefault();
+        //         console.log("It was clicked")
+        //         methods.analyze();
+        //     }
+        // });
 
+       $(canvas).on("touchstart", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var touch = event.originalEvent.touches[0];
+          var x = touch.pageX - offset.left;
+          var y = touch.pageY - offset.top;
+          methods.start(x, y);
+       });
 
-        $("#analyzeButton").click(
-            function(event) {
-                event.preventDefault();
-                methods.analyze();
-            }
-        );
+       $(canvas).on("touchmove", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var touch = event.originalEvent.touches[0];
+          var x = touch.pageX - offset.left;
+          var y = touch.pageY - offset.top;
+          methods.move(x, y);
+       });
 
+       $("*").on("touchend", function(event) {
+          event.preventDefault();
+          methods.end();
+       });
 
-        $(canvas).on("touchstart", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var touch = event.originalEvent.touches[0];
-            var x = touch.pageX - offset.left;
-            var y = touch.pageY - offset.top;
-            methods.start(x, y);
-        });
+       $(canvas).on("mousedown", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var x = event.pageX - offset.left;
+          var y = event.pageY - offset.top;
+          methods.start(x, y);
+       });
 
-        $(canvas).on("touchmove", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var touch = event.originalEvent.touches[0];
-            var x = touch.pageX - offset.left;
-            var y = touch.pageY - offset.top;
-            methods.move(x, y);
-        });
+       $(canvas).on("mousemove", function(event) {
+          event.preventDefault();
+          var offset = $(this).first().offset();
+          var x = event.pageX - offset.left;
+          var y = event.pageY - offset.top;
+          methods.move(x, y);
+       });
 
-        $("*").on("touchend", function(event) {
-            event.preventDefault();
-            methods.end();
-        });
-
-        $(canvas).on("mousedown", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var x = event.pageX - offset.left;
-            var y = event.pageY - offset.top;
-            methods.start(x, y);
-        });
-
-        $(canvas).on("mousemove", function(event) {
-            event.preventDefault();
-            var offset = $(this).first().offset();
-            var x = event.pageX - offset.left;
-            var y = event.pageY - offset.top;
-            methods.move(x, y);
-        });
-
-        $("*").on("mouseup", function(event) {
-            event.preventDefault();
-            methods.end();
-        });
+       $("*").on("mouseup", function(event) {
+          event.preventDefault();
+          methods.end();
+       });
     };
 
     function syntaxHighlight(json) {
@@ -231,6 +227,4 @@ if (Meteor.isClient) {
             return '<span class="' + cls + '">' + match + '</span>';
         });
     };
-
-
 }

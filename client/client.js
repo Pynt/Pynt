@@ -45,9 +45,31 @@ if (Meteor.isClient) {
             data,
             function(jsonResult) {
                 $("#loading").hide();
+                console.log(jsonResult.result);
+
+                text = jsonResult.result.textLines;
+                shapes = jsonResult.result.shapes;
+                //analyze results here
+                if(text.length>0){
+                    for (var i = 0; i < text.length; i++) {
+                        candidates = text[i].result.textSegmentResult.candidates
+                        for (var i = 0; i < candidates.length; i++) {
+                            console.log(candidates[i].label)
+                        };
+                    };
+                }
+                if(shapes.length>0){
+                    for (var i = 0; i < shapes.length; i++) {
+                        candidates = shapes[i].candidates
+                        for (var i = 0; i < candidates.length; i++) {
+                            console.log(candidates[i].label);
+                        };
+                    };
+                }
+
+
 
                 var str = JSON.stringify(jsonResult, undefined, 4);
-
                 $("#result").html(syntaxHighlight(str));
             },
             "json"

@@ -12,8 +12,9 @@ ctl-helper@1.0.4
 ctl@1.0.2
 ddp@1.0.11
 deps@1.0.5
+digioak:codemirror@0.0.2
 ejson@1.0.4
-ewall:foundation@5.4.6
+ewall:foundation@5.4.7
 fastclick@1.0.1
 follower-livedata@1.0.2
 geojson-utils@1.0.1

@@ -26,3 +26,6 @@ body{
 html {
   overflow-x: hidden;
 }
+#cm{
+	border: solid #ccc 1px;
+}

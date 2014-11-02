@@ -1,3 +1,10 @@
+window.onload = function(){
+  codeMirror = CodeMirror(document.getElementById('cm'), {
+    value: "print('Python!');\n",
+    mode:  "python"
+  });
+}
+
 //the console will log that Sk is not foudn, which is not a problem as the code still runs
 
 function outf(text) { 
@@ -16,7 +23,8 @@ function builtinRead(x) {
 // configure the output function
 // call Sk.importMainWithBody()
 function runit() { 
-   var prog = document.getElementById("yourcode").value; 
+   // var prog = document.getElementById("yourcode").value; 
+   var prog = codeMirror.getValue();
    var mypre = document.getElementById("output"); 
    mypre.innerHTML = ''; 
    Sk.pre = "output";

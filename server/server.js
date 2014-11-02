@@ -1,0 +1,1 @@
+dataStream = new Meteor.Stream('data');

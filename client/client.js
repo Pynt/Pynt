@@ -118,7 +118,7 @@ recognize = function(strokes, apiKey, url) {
                     {
                         name = 'Triangle';
                     }
-                    else if(name.indexOf('quadrilateral'))
+                    if(name.indexOf('quadrilateral'))
                     {
                         name = 'Quad';
                     }
@@ -308,31 +308,30 @@ function receiveData(data) {
     var stk = new Array();
     var classes = {};
 
-    console.log("IM HERE");
+    document.getElementById("yourcode").value = ""
+    console.log(data);
 
     for(var i=0; i<data.length; i++)
     {
         if(data[i].type == "shape")
         {
-            if (data[i].child == undefined)
-            {
-                stk.push
-                (
-                    {
-                        shape: data[i].value,
-                        nu: 0
-                    }
-                )
-                console.log("um");
+            stk.push
+            (
+                {
+                    shape: data[i].value,
+                    child: data[i].child
+                }
+            )
+            console.log("um");
                 //$("#recFail").show();
-            }
+
             //document.getElementById("yourcode").setContent = data[i].child.value + "= "
         }
         else if(data[i].type == 'list')
         {
             var a = stk.pop()
             var list = data[i].list
-            if(a.nu == 0)
+            if(a.child == undefined)
             {
                 var str = 'class ' + a.shape + ":\n";
                 str += '    def __init__(self'
@@ -345,13 +344,19 @@ function receiveData(data) {
                 {
                     str += '        self.'+list[j].value+" = "+list[j].value+j.toString()+"\n";
                 }
-                document.getElementById("yourcode").value = str;
+                document.getElementById("yourcode").value += str;
                 console.log("hello");
             }
             else
             {
-            
-
+                var str = a.child.value +" = " + a.shape+"(";
+                for(var j=0; j<list.length; j++)
+                {
+                    //if(list[j].value.indexOf('=')!=-1)
+                    str += list[j].value.substring(list[j].value.indexOf('=')+1, list[j].value.length)+", ";
+                }
+                str = str.substring(0,str.length-2) + ")\n"
+                document.getElementById("yourcode").value += str;
             }
         }
     }

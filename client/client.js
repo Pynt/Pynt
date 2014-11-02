@@ -308,7 +308,7 @@ function receiveData(data) {
     var stk = new Array();
     var classes = {};
 
-    document.getElementById("yourcode").value = ""
+    codeMirror.setValue("")
     console.log(data);
 
     for(var i=0; i<data.length; i++)
@@ -344,7 +344,7 @@ function receiveData(data) {
                 {
                     str += '        self.'+list[j].value+" = "+list[j].value+j.toString()+"\n";
                 }
-                document.getElementById("yourcode").value += str;
+                codeMirror.setValue(codeMirror.getValue() + str);
                 console.log("hello");
             }
             else
@@ -356,14 +356,14 @@ function receiveData(data) {
                     str += list[j].value.substring(list[j].value.indexOf('=')+1, list[j].value.length)+", ";
                 }
                 str = str.substring(0,str.length-2) + ")\n"
-                document.getElementById("yourcode").value += str;
+                codeMirror.setValue(codeMirror.getValue() + str);
             }
 
         }
         else if(data[i].type == 'text')
         {
             //if(data[i].value.charAt(0)=='→')
-                document.getElementById("yourcode").value += data[i].value;
+                codeMirror.setValue(codeMirror.getValue() + data[i].value);
         }
     }
 }

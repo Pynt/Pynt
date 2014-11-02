@@ -362,7 +362,7 @@ function receiveData(data) {
         }
         else if(data[i].type == 'text')
         {
-            if(data[i].value.charAt(0)=='→')
+            //if(data[i].value.charAt(0)=='→')
                 document.getElementById("yourcode").value += data[i].value.substring(1);
         }
     }

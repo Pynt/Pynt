@@ -1,3 +1,4 @@
+Session.set("quad2", false);
 dataStream = new Meteor.Stream('data');
 
 sendData = function(data) {//to be called when we want to send data
@@ -181,7 +182,7 @@ Template.pyDraw.events({
 /** Draw strokes in the canvas, as specified in the accompanying HTML file. */
 $.fn.write = function(apiKey, url) {
     var stroke;
-    var strokes = [];
+    strokes = [];
 
     var canvas = this.get(0);
     var ctx = canvas.getContext("2d");
@@ -250,6 +251,12 @@ $.fn.write = function(apiKey, url) {
       var x = touch.pageX - offset.left;
       var y = touch.pageY - offset.top;
       methods.move(x, y);
+      if(!Session.get("quad2") && touch.pageY>(($(canvas).height())/2)){
+        console.log("Entered second quadrant");
+        button();
+        strokes = []
+        Session.set("quad2", true);
+      }
    });
 
    $("*").on("touchend", function(event) {
@@ -278,7 +285,6 @@ $.fn.write = function(apiKey, url) {
       methods.end();
    });
 };
-
 function syntaxHighlight(json) {
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
@@ -307,7 +313,7 @@ UI.registerHelper("isMobile", function(){
 function receiveData(data) {
     var stk = new Array();
     var classes = {};
-
+    console.log(codeMirror)
     codeMirror.setValue("")
     console.log(data);
 

@@ -4,14 +4,14 @@
 </head>
 
 <body>
-    <div class = "row">
-        <div class = "columns small-centered small-12">
-            <h1>Welcome to pyDraw</h1> 
-        </div>
-    </div>
     {{#if isMobile}}
         {{> pyDraw}}
     {{else}}
+        <div class = "row">
+            <div class = "columns small-centered small-12">
+                <h1>Welcome to pyDraw</h1> 
+            </div>
+        </div>
         {{> pythonInterpret}}
         {{> alerts}}
     {{/if}}
@@ -27,7 +27,7 @@
     <br>
     <div class="row">
         <div class = "columns small-centered small-9">
-            <button id="analyzeButton" style = "width:100%; height: 100px">Analyze</button>
+            <button id="analyzeButton" style = "width:100%; height: 100px; font-size:50px">Analyze</button>
         </div>
     </div> 
     <div class = "row">
@@ -37,7 +37,7 @@
             <script type="application/javascript" src="myScriptMethods.js"></script>
             <script type="application/javascript">
                 $(function() {
-                    var apiKey = "a7aa2fb8-7aff-4aa3-b650-031d60deaaa3";
+                    var apiKey = "ad58751e-7fad-4669-8f96-037ba29957d3";
 
                     $("#canvas").write(apiKey);
                 });
@@ -50,7 +50,7 @@
     <script type="application/javascript" src="myScriptMethods.js"></script>
     <script type="application/javascript">
       $(function() {
-        var apiKey = "a7aa2fb8-7aff-4aa3-b650-031d60deaaa3";
+        var apiKey = "ad58751e-7fad-4669-8f96-037ba29957d3";
         
         $("#canvas").write(apiKey);
       });

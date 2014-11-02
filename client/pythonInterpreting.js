@@ -1,6 +1,6 @@
 window.onload = function(){
   codeMirror = CodeMirror(document.getElementById('cm'), {
-    value: "print('Python!');\n",
+    value: "",
     mode:  "python"
   });
 }

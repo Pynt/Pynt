@@ -1,5 +1,7 @@
 Session.set("quad2", false);
 dataStream = new Meteor.Stream('data');
+Session.set("prevData", {});
+butttonPress = false;
 
 sendData = function(data) {//to be called when we want to send data
     dataStream.emit('message', data);
@@ -16,8 +18,14 @@ dataStream.on('message', function(data) {
         
     }
     else{//confirmation - received on mobile end
-        if(data == "OK")//shit didn't go down
+        if(data == "OK"){
             console.log("Computer successfully received",data);
+            if(butttonPress == true)
+            {
+                butttonPress = false;
+                location.reload()
+            }
+    }
     }
     
 });
@@ -119,7 +127,7 @@ recognize = function(strokes, apiKey, url) {
                     {
                         name = 'Triangle';
                     }
-                    if(name.indexOf('quadrilateral'))
+                    if(name.indexOf('quad'))
                     {
                         name = 'Quad';
                     }
@@ -159,7 +167,7 @@ recognize = function(strokes, apiKey, url) {
                 return e!=null;//removes null values
             })
             console.log(obj);
-
+            
             sendData(obj);
         },
         "json"
@@ -174,9 +182,11 @@ function button(){
 Template.pyDraw.events({
     'click #analyzeButton' : function(){
         button();
+        butttonPress = true;
     },
     'touchend #analyzeButton' : function(){
         button();
+        butttonPress = true;
     }
 });
 /** Draw strokes in the canvas, as specified in the accompanying HTML file. */
@@ -242,6 +252,7 @@ $.fn.write = function(apiKey, url) {
       var x = touch.pageX - offset.left;
       var y = touch.pageY - offset.top;
       methods.start(x, y);
+
    });
 
    $(canvas).on("touchmove", function(event) {
@@ -251,7 +262,7 @@ $.fn.write = function(apiKey, url) {
       var x = touch.pageX - offset.left;
       var y = touch.pageY - offset.top;
       methods.move(x, y);
-      if(!Session.get("quad2") && touch.pageY>(($(canvas).height())/2)){
+    if(!Session.get("quad2") && touch.pageY>(($(canvas).height())/2)){
         console.log("Entered second quadrant");
         button();
         strokes = []
@@ -262,6 +273,7 @@ $.fn.write = function(apiKey, url) {
    $("*").on("touchend", function(event) {
       event.preventDefault();
       methods.end();
+
    });
 
    $(canvas).on("mousedown", function(event) {
@@ -311,10 +323,14 @@ UI.registerHelper("isMobile", function(){
 
 
 function receiveData(data) {
+    if(data[0].x != Session.get("prevData")){
+        Session.set("prevData", data[0].x);
+        console.log("The stuff directly under this is the session varss")
+        console.log(Session.get("prevData"));
     var stk = new Array();
     var classes = {};
     console.log(codeMirror)
-    codeMirror.setValue("")
+    //codeMirror.setValue("")
     console.log(data);
 
     for(var i=0; i<data.length; i++)
@@ -350,7 +366,7 @@ function receiveData(data) {
                 {
                     str += '        self.'+list[j].value+" = "+list[j].value+j.toString()+"\n";
                 }
-                codeMirror.setValue(codeMirror.getValue() + str);
+                codeMirror.setValue(codeMirror.getValue() + str + "\n");
                 console.log("hello");
             }
             else
@@ -361,7 +377,7 @@ function receiveData(data) {
                     //if(list[j].value.indexOf('=')!=-1)
                     str += list[j].value.substring(list[j].value.indexOf('=')+1, list[j].value.length)+", ";
                 }
-                str = str.substring(0,str.length-2) + ")\n"
+                str = str.substring(0,str.length-2) + ")\n\n"
                 codeMirror.setValue(codeMirror.getValue() + str);
             }
 
@@ -369,7 +385,9 @@ function receiveData(data) {
         else if(data[i].type == 'text')
         {
             //if(data[i].value.charAt(0)=='→')
-                codeMirror.setValue(codeMirror.getValue() + data[i].value);
+            var sasa = data[i].value.replace(" ","");
+            codeMirror.setValue(codeMirror.getValue() + sasa+"\n\n");
         }
+    }
     }
 }

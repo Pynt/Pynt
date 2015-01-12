@@ -29,3 +29,8 @@ html {
 #cm{
 	border: solid #ccc 1px;
 }
+
+pre {
+	overflow-x:visible;
+	overflow-y:visible;
+}

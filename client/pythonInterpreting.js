@@ -1,3 +1,7 @@
+Deps.autorun(function () {
+  Meteor.subscribe('userSnippets', Meteor.userId());
+});
+
 window.onload = function(){
   codeMirror = CodeMirror(document.getElementById('cm'), {
     value: "",
@@ -17,6 +21,20 @@ function builtinRead(x) {
     return Sk.builtinFiles["files"][x];
 }
  
+
+function saveCode(){
+  var currCode = codeMirror.getValue()
+  var currName = $("#snippetName").val()
+  if(currName)
+  {
+    Meteor.call('saveSnippet', currCode, currName, Meteor.userId())
+    console.log("saving code")
+  }
+  else{
+    console.log("please enter a name")
+  }
+}
+
 // Here's everything you need to run a python program in skulpt
 // grab the code from your textarea
 // get a reference to your pre element for output
@@ -43,5 +61,9 @@ Template.pythonInterpret.events({
     },
     'touchend #runPython' : function(){
       runit();
+    },
+    'click #saveCode' : function(){
+      //saveCode() is in snippet.js
+      saveCode()
     }
 });

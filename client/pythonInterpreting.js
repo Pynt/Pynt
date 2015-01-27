@@ -34,6 +34,15 @@ function saveCode(){
     console.log("please enter a name")
   }
 }
+function loadCode(){
+  var currName = $("#snippetName").val()
+  if(currName){
+    var currSnippet = Snippets.findOne({name:currName})
+    if(currSnippet){
+      codeMirror.setValue(currSnippet.code)
+    }
+  }
+}
 
 // Here's everything you need to run a python program in skulpt
 // grab the code from your textarea
@@ -65,5 +74,8 @@ Template.pythonInterpret.events({
     'click #saveCode' : function(){
       //saveCode() is in snippet.js
       saveCode()
+    },
+    'click #loadCode' : function(){
+      loadCode()
     }
 });

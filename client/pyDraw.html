@@ -16,6 +16,9 @@
         </div>
         {{> pythonInterpret}}
         {{> alerts}}
+        {{#if currentUser}}
+            {{> snippets}}
+        {{/if}}
     {{/if}}
 </body>
 
@@ -78,19 +81,20 @@ for i in [1,2,"buckle my shoe"]:
         </div>
     </div>
     <div class = "row">
+        <div class = "columns small-centered small-12 codeOutput">
+            <pre id="output" ></pre>
+        </div>
+    </div>
+    <br>
+</template>
+<template name="snippets">
+    <div class = "row">
         <div class = "columns small-centered small-4 taCenter">
             <input type="text" id="snippetName" placeholder = "Snippet Name" />
             <button type="button" id="saveCode">Save Code</button>
             <button type="button" id="loadCode">Load Code</button>
         </div>
     </div>
-    <div class = "row">
-        <div class = "columns small-centered small-12 codeOutput">
-            <pre id="output" ></pre>
-        </div>
-    </div>
-    <br>
-
 </template>
 <template name = "alerts">
     <div class = "row">

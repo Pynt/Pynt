@@ -18,3 +18,11 @@ Use cases
  - **Helps visualize code.** For example, if you are trying to explain an algorithm, you can draw out what you want to say in a sort of psuedo-code rather than having to rely on traditional methods and everything you explain will become python code that you can edit as needed
  - **Learning!** This is a great tool to help people learn python, or any object oriented language. Kids (and humans in general) understand shapes and drawings better than code so this is extremely useful to introduce the idea of object-oriented programming. 
  - **Class notes.** If you take notes in your CS class on a tablet, this will let you automatically convert your handwriting to text and send it to your computer. Then you can move your actual notes to a text-editor (or word) and run whatever code you wrote down.  
+ 
+Examples
+---
+![image 1](http://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/181/626/datas/gallery.jpg)
+
+![image 2](http://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/181/627/datas/gallery.jpg)
+
+![image 3](http://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/181/625/datas/gallery.jpg)
